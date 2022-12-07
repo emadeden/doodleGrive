@@ -1,0 +1,28 @@
+{% extends "base2.html" %}
+{% block title%}
+<title>Show Mygroup groups  </title>
+{% endblock %}
+
+{% block content %}
+<div id="accordion">
+    <div class="card">
+        <div class="card-header">
+        <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+            My groups 
+        </a>
+        </div>
+        <div id="collapseTwo" class="collapse show" data-parent="#accordion">
+        <div class="card-body">
+            {%for  group in groups %}
+            <strong><a href="{% url 'getGroupDetail' id=group.id %}"> {{group}} </a> </strong> 
+            {% if group.owner ==  user %}
+            <small><a href="{% url 'editGroup' id=group.id %}">(Edit Group)</a></small>
+            {% endif %}
+            <br>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

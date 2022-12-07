@@ -1,0 +1,121 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    {% block title %}<title> Not registered yet </title>{% endblock %}
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/all.css' %}">
+    <script src="{% static 'bootstrap/js/jqurey.js' %}"></script>
+    <script src="{% static 'bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static 'bootstrap/js/all.js' %}"></script>
+
+</head>
+<body>
+    
+
+{% block navbar%}
+
+<div class="mb-5"  style="position: relative;display: flex;justify-content: space-between;align-items: center; border-bottom: 1px solid grey; box-shadow: 3px 3px 5px grey;">
+  <div style="display: flex; align-items: center;">
+    <a class="navbar-brand" href="{% url 'home' %}"> <img src="{% static 'oo.png' %}" style="width: 3rem;">  </a>
+     <div class="font-weight-bold text-info " style="">Hello {{user.username }} </div>
+  </div>
+  
+
+
+  <form action="/home/"  method="get" id="search_form">
+    <div class="input-group " >
+      <input type="text" class="form-control" placeholder="Enter file name.." name="file_name" style="">
+      <div class="input-group-append">
+        <button class="btn btn-success" ><i class="fa fa-search"></i> </button>
+      </div>
+    </div>
+  </form>
+
+
+  {% if request.user.is_authenticated %}
+  <div style="display: flex; align-items: center;"> 
+
+    <div class="dropdown">
+      <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown">
+        <strong>Files <i class="fa fa-file"></i> </strong>
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="{% url 'upload'%}">Upload file <i class="fa fa-upload"></i> </a>
+        <a class="dropdown-item" href="{% url 'blockFile'%}">block Files <i class="fa fa-lock"></i></a>
+        <a class="dropdown-item" href="{% url 'unblockFile'%}">un block Files <i class="fa fa-unlock"></i></a>
+        <a class="dropdown-item" href="{% url 'showMyFiles'%}">show My Files <i class="fa fa-eye"></i> </a>
+      </div>
+    </div> 
+
+    <div class="dropdown ml-2">
+      <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown">
+        <strong>Groups <i class="fa fa-users"></i></strong>
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="{% url 'createGroup'%}">Create Group</a>
+        <a class="dropdown-item" href="{% url 'showMyGroup'%}">Show my groups </a>
+      </div>
+    </div> 
+
+    <div class="dropdown ml-2">
+      <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown">
+        <strong>Reports <i class="fa fa-newspaper"></i> </strong>
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="{% url 'reports'%}">Reports</a>
+      </div>
+    </div> 
+
+    <a class="btn btn-outline-danger font-weight-bold" href="/logout/">Logout <i class="fa fa-sign-out-alt"></i></a>
+    <button  type="button" class="btn ml-2" id="search_icon"> <strong><i class="fa fa-search"></i></strong> </button>
+  </div>
+  
+
+  {% else %}
+  <div>
+    <a class=" btn btn-outline-success" href="/login/">Login <i class="fa  fa-sign-in-alt"></i></a>
+    <button  type="button" class="btn ml-2" id="search_icon"> <strong><i class="fa fa-search"></i></strong> </button>
+  </div>
+  {% endif %}
+
+  
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+  <h2>Not registered yet</h2>
+{% endblock %}
+
+</body>
+</html>
+<style>
+
+  #search_form{
+    position: absolute;
+    top: 120%;
+    right: 1rem;
+    width: 600px;
+    transform: scale(0,1);
+    transition: all .2s;
+  }
+  #search_form.active{
+    transform: scale(1,1);
+    
+  }
+</style>
+
+<script>
+  search_form = document.getElementById('search_form')
+  search_icon = document.getElementById('search_icon')
+  search_icon.onclick = function(){
+            search_form.classList.toggle("active");
+        }
+</script>

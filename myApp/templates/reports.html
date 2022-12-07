@@ -1,0 +1,21 @@
+{% extends "base2.html" %}
+{% block title%}
+    <title>Reports </title>
+{% endblock %}
+
+{% block content %}
+
+{% for report in reports %}
+<div class="container-fluid">
+    <div class="alert alert-dark alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {% for key, value in report.items %}
+        <strong>{{key}}: {{value}}</strong><br>
+        {% endfor %}
+    </div>
+
+
+
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base2.html" %}
+{% block title%}
+<title>Get Group Details  </title>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div id="accordion">
+
+        <div class="card">
+          <div class="card-header">
+            <a class="card-link" data-toggle="collapse" href="#collapseOne">
+              Group name 
+            </a>
+          </div>
+          <div id="collapseOne" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+              {{group.name }}
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-header">
+            <a class="card-link" data-toggle="collapse" href="#owner">
+              Group owner
+            </a>
+          </div>
+          <div id="owner" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+              {{group.owner }}
+            </div>
+          </div>
+        </div>
+
+      
+        <div class="card">
+          <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+              Users in group ({{users.count}})
+            </a>
+          </div>
+          <div id="collapseTwo" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+              {%for  user in users %}
+              <span>{{user.username }}</span>
+              <br>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+              Files in group ({{files.count}})
+            </a>
+          </div>
+          <div id="collapseThree" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+              {% for file in files %}
+                <a href="{% url 'getFileDetail' id=file.id %}" class="text-dark"> {{file.name }} <small>{{file.block}}</small> </a>
+                <br>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      
+</div> 
+
+
+{% if user == group.owner %}
+  <a class='btn btn-danger mt-4' href='{% url "deleteGroup" group.pk %}'>
+    Delete Group 
+  </a>
+{% endif %}
+
+{% endblock %}

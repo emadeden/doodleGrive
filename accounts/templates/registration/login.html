@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title> Sign up</title>
+{% endblock %}
+
+
+{% block navbar%}
+{%endblock %}
+
+  <!--Register--> 
+ {% block content %}
+ <div class="" style="height: 100vh;display: flex; justify-content: center;align-items: center; background-color: aliceblue;" >
+     <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        <div class="form-group">
+
+          {% if field.errors  %}
+            <div class="alert alert-danger">
+              <strong>{{ field.errors }}</strong>
+            </div>             
+          {% endif %}
+
+            <h5>{{ field.label }}:</h5>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <p class="text-center"> <span class="h5 font-weight-bold"> Register </span><a href="{%url 'register'%}" class="font-weight-bold"> here</a></p>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+</form>
+ </div>
+ {% endblock %}
+
+

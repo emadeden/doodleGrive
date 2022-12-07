@@ -1,0 +1,59 @@
+{% extends "base2.html" %}
+    {% block title%}
+    <title>Home</title>
+    {% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+<table class="table table-hover">
+    <thead>
+      <tr class="" style="box-shadow: 1px 1px 5px grey;;">
+        <th >File name <i class="fa fa-file"></i></th>
+        <th>Owner <i class="fa fa-user"></i> </th>
+        <th>Group <i class="fa fa-users"></i></th>
+        <th >Created Date <i class="fa fa-clock"></i></th>
+        <th >Blcok <i class="fa fa-lock"></i> </th>
+        
+      </tr>
+    </thead>
+    <tbody>
+        {% for file in files %}
+      <tr>
+        <td><strong> <a href="{% url 'getFileDetail' id=file.id %}"> {{file.name }} </a></strong></td>
+
+         <td> <strong>
+          {% if file.owner.pk == user.pk %}
+           <span class="text-dark"> my File  </span>
+          {% else %}
+          <span class="text-secondary">{{file.owner}}  </span>
+          {% endif %}
+          
+         </strong></td>
+
+        <td>
+        {% for g in file.groups.all %}
+        <strong><a href="{% url 'getGroupDetail' id=g.id %}"> {{g}} </a> </strong> <br>
+        {% endfor %}
+      </td>
+
+        <td style="font-style: italic; letter-spacing: 2px ;">{{file.createdDate}}</td>
+        <td style=" letter-spacing: 2px ;"><strong>{{file.block}}</strong></td>
+<!-- 
+        {% if file.owner.pk == user.pk %}
+
+          <td > <a href="{% url 'editContent' id=file.id %}" class="btn btn-outline-primary font-weight-bold"> Edit </a> <a href="{% url 'delete' id=file.id %}" class="btn btn-warning"> Delete </a></td>
+          {% elif file.groups.all in user.g_set.all %}
+          <td > <a href="{% url 'editContent' id=file.id %}" class="btn btn-outline-dark font-weight-bold"> Edit Content </a> </td>
+          {% else %}
+          {{user.g_set.all.values_list}}
+          <td > <a href="{% url 'displayContent' id=file.id %}" class="btn btn-dark font-weight-bold"> Just View </a> </td>
+        {% endif %} -->
+
+      </tr>
+     {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

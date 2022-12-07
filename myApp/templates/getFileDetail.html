@@ -1,0 +1,63 @@
+{% extends "base2.html" %}
+    {% block title%}
+    <title>getFileDetail id {{file.id}} </title>
+    {% endblock %}
+
+
+    {% block content %}
+    <div class="container-fluid">
+    <table class="table table-hover mb-4">
+        <thead>
+          <tr class="" style="box-shadow: 1px 1px 5px grey;;">
+            <th >File name <i class="fa fa-file"></i> </th>
+            <th>Owner <i class="fa fa-user"></i> </th>
+            <th>Group <i class="fa fa-users "></i></th>
+            <th >Created Date <i class="fa fa-clock"></i></th>
+            <th >Blcok <i class="fa fa-lock"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><strong> {{file.name }} </strong></td>
+             <td> <strong>{{file.owner}} </strong></td>
+    
+            <td>
+            {% for g in file.groups.all %}
+            <strong><a href="{% url 'getGroupDetail' id=g.id %}"> {{g}} </a> </strong> <br>
+            {% endfor %}
+          </td>
+    
+            <td style="font-style: italic; letter-spacing: 2px ;">{{file.createdDate}}</td>
+            <td style="">{{file.block}}</td>
+
+    
+          </tr>
+         
+        </tbody>
+      </table>
+
+      {% if file.owner.pk == user.pk %}
+         <a href="{% url 'update' id=file.id %}" class="btn btn-outline-primary font-weight-bold"> Edit </a> <a href="{% url 'delete' id=file.id %}" class="btn btn-warning"> Delete </a> <a href="{% url 'editContent' id=file.id %}" class="btn btn-dark font-weight-bold"> Edit Content </a>       
+        <button data-toggle="collapse" data-target="#demo" class="btn btn-outline-dark font-weight-bold">Just View </button>
+
+        <div id="demo" class="collapse mt-4">
+          {{file.content}}
+        </div> 
+      {% elif level == 1 %}
+         <a href="{% url 'editContent' id=file.id %}" class="btn btn-outline-dark font-weight-bold"> Edit Content </a>       
+        <button data-toggle="collapse" data-target="#demo" class="btn btn-dark ">Just View </button>
+        <div id="demo" class="collapse mt-4">
+            {{file.content}}
+          </div> 
+      {% else %}
+      <button data-toggle="collapse" data-target="#demo" class="btn btn-outline-dark font-weight-bold">Just View </button>
+
+      <div id="demo" class="collapse mt-4">
+        {{file.content}}
+      </div> 
+      {% endif %}
+
+    </div>
+    
+    {% endblock %}

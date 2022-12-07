@@ -1,0 +1,28 @@
+{% extends "base2.html" %}
+    {% block title%}
+    <title>block Files </title>
+    {% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <form action = "" method = "POST">
+      {% csrf_token %}
+
+
+
+      <div class="form-group">
+        <label for="sel1">Select files to unblock :</label>
+        <select class="form-control" multiple id="sel1" name="files">          
+          {% for file in files %}
+              <option >{{file}}</option>
+          {% endfor %}
+
+
+        </select>
+      </div> 
+
+
+      <input type="submit" value="Block" class="btn btn-primary">
+    </form>
+  </div>
+{% endblock %}

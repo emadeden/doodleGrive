@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+   
+</head>
+<body>
+
+    <!-- <script>
+        var person ={
+            name: 'emad',
+            height: 170,
+            age: 21
+        }        
+
+
+        function obj(){ //this is objects constracter ;
+            this.height = arguments[2];
+            this.date = arguments[1];
+            this.name = arguments[0];
+            this.changeName = changeName;
+            this.info= function(){
+                return (`your name is ${this.name} and your date is ${this.date.years} ${this.date.month} ${this.date.day} and your height is ${this.height}` );
+
+            }
+        }
+        
+        function changeName(name){
+            this.name = name ;
+        }
+
+        var ob1  = new obj('emad' , {years:2001 ,month:1 ,day:7 } , 173);
+        document.write(ob1.info() + '<br>');
+        ob1.changeName('ahmed');
+        document.write(ob1.info() + '<br>');
+
+
+
+
+
+    </script> -->
+
+    <div id="emad">
+
+    </div>
+
+<script>
+    
+    // var mypromise = new Promise((resolve , reject )=>{
+    //     resolve();
+    //     reject();        
+    // });
+
+    // var mypromise = new Promise ((resolve, reject)=>{
+    //     connect  = false;
+    //     if(connect){
+    //         resolve('emad alden');
+    //     }else{
+    //         reject('this is error ');
+    //     }
+    // }).then((value)=>{document.getElementById('emad').innerHTML = value ; return value+' and new then '},(error)=>{document.getElementById('emad').innerHTML= error}
+    // ).then((value)=>{console.log(value)} , null)
+
+
+
+ async function emad(){
+    newpro = new Promise((resolve , reject)=>{
+        resolve('emad alden madwar WITH RERSOLVE ');
+        reject('there is error emad alden ');
+
+    }); 
+
+    console.log(await newpro);
+    
+
+}   
+// emad();
+// emad2()
+// console.log('asdada asd asd ass d')
+
+// console.log('asdada asd asd ass d')
+
+// console.log('asdada asd asd ass d')
+
+
+
+
+</script>
+</body>
+</html>
