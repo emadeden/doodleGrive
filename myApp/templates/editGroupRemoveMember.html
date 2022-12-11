@@ -1,0 +1,27 @@
+{% extends "base2.html" %}
+    {% block title%}
+    <title>EditGroup </title>
+    {% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <form action = "" method = "POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="sel1">Select Users:</label>
+        <select class="form-control" multiple id="sel1" name="users">
+          {% for user in users %}
+          <option>{{user}}</option>
+          {% endfor %}
+          
+       
+
+
+        </select>
+      </div> 
+
+
+      <input type="submit" value="Create" class="btn btn-primary">
+    </form>
+  </div>
+{% endblock %}

@@ -322,6 +322,55 @@ def editGroup(request , id):
             if blockedFiles.filter(block = user).count() == 0 :
                 usersCouldRemove.append(user)
         return render(request ,  'editGroup.html' , {'name': name , 'users': usersCouldRemove , 'restUSers': restUSers})
+
+
+
+# dont forget to auth onwer of group only can do this 
+def editGroupRemoveMember(request,  id ):
+    user = request.user 
+    if request.method =='POST':
+        g = G.objects.get(pk = id )
+        blockedFile = g.file_set.all().filter(~Q(block = None)) 
+        usersCouldNotRemove = [] 
+        for file in blockedFile :
+            usersCouldNotRemove.append(file.block)
+        
+        usersCouldRemove = g.users.all().exclude(pk__in = usersCouldNotRemove )
+
+
+        removedUsersList = request.POST.getlist('users')
+        removedUsers = g.users.all().filter(name__in = removedUsersList).distinct()
+
+        if removedUsers.count() != len(removedUsersList):
+            return JsonResponse({'status':'fail','message':'error'},status = 500)
+        
+        g.users.remove(*removedUsers)
+        return JsonResponse({'status':'success','message':'Success'},status = 200)
+        # dont forget to record log 
+   
+    else:
+        g = G.objects.all().get(pk = id )
+        blockedFile = g.file_set.all().filter(~Q(block = None)) 
+        usersCouldNotRemove = [] 
+        for file in blockedFile :
+            usersCouldNotRemove.append(file.block.pk)
+        
+        usersCouldRemove = g.users.all().exclude(pk__in = usersCouldNotRemove )
+        return render (request , 'editGroupRemoveMember.html' , {'users':usersCouldRemove} )
+
+# dont forget to auth onwer of group only can do this 
+def editGroupAddMember(request, id ):
+    user = request.user 
+    if request.method =='POST':
+        g = G.objects.get(pk = id )
+        users = request.POST.getlist('users')
+        users = CustomUser.objects.filter(username__in = users ).distinct()
+        g.users.add(*users)
+    else:
+        g = G.objects.get(pk = id )
+        usersCouldAdd = CustomUser.objects.all().exclude(pk__in = g.users.all()).distinct()
+        return render (request , 'editGroupRemoveMember.html' , {'users':usersCouldAdd} )
+
     
 def blockFile(request):
     user = request.user 

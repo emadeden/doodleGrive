@@ -16,7 +16,8 @@
             {%for  group in groups %}
             <strong><a href="{% url 'getGroupDetail' id=group.id %}"> {{group}} </a> </strong> 
             {% if group.owner ==  user %}
-            <small><a href="{% url 'editGroup' id=group.id %}">(Edit Group)</a></small>
+            <small><a href="{% url 'editGroupRemoveMember' id=group.id %}">(Edit Group Remove Member) / </a></small>
+            <small><a href="{% url 'editGroupAddMember' id=group.id %}">(Edit Group Add Member)</a></small>
             {% endif %}
             <br>
             {% endfor %}

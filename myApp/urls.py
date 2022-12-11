@@ -28,8 +28,9 @@ urlpatterns = [
 
     #path("testTransaction/", views.testTransaction, name="testTransaction"),
     path("<id>/deleteGroup", views.deleteGroup, name="deleteGroup"),
-    path("reports", views.reports, name="reports"),
-    
+    path("reports/", views.reports, name="reports"),
+    path("<id>/editGroupRemoveMember", views.editGroupRemoveMember, name="editGroupRemoveMember"),
+    path("<id>/editGroupAddMember", views.editGroupAddMember, name="editGroupAddMember"),
     
 ]
 

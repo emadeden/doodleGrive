@@ -1,4 +1,0 @@
-tail /var/log/syslog 
-journalctl _PID=15413 (pid is the proccess id)
-sudo lshw -class network
-dhcp-lease-list
