@@ -1,0 +1,1 @@
+b'tail /var/log/syslog \njournalctl _PID=15413 (pid is the proccess id)\nsudo lshw -class network\ndhcp-lease-list\n' emad alden 
