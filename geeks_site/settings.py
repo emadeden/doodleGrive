@@ -154,7 +154,6 @@ AUTHENTICATION_REQUIRED_URLS = (
     r'^.*./displayContent.*',
 )
 FILE_GROUP_MEMBERSHIP_REQUIRED_URLS = (
-    r'^.*./update.*',
     r'^.*.upload.*',
     r'^.*./editContent.*',
     r'^.*./getFileDetail.*',
@@ -164,6 +163,7 @@ GROUP_GROUP_MEMBERSHIP_REQUIRED_URLS = (
     r'^.*./getGroupDetail.*',
 )
 FILE_OWNER_REQUIRED_URLS =(
+    r'^.*./update.*',
     r'^.*./delete.*',
 )
 GROUP_OWNER_REQUIRED_URLS = (

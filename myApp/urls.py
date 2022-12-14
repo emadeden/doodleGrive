@@ -14,18 +14,14 @@ urlpatterns = [
     path("<id>/getFileDetail/", views.getFileDetail, name="getFileDetail"), 
     path("<id>/getGroupDetail/", views.getGroupDetail, name="getGroupDetail"), 
     path("showMyGroups/", views.showMyGroup, name="showMyGroup"), 
-    
     path("home/", views.home, name="home"), 
     path("<id>/displayContent", views.displayContent, name="displayContent"), 
     path("<id>/editContent", views.editContent, name="editContent"),
-    path("<id>/editGroup", views.editGroup, name="editGroup"),
     path("blockFile/", views.blockFile, name="blockFile"),
     path("unblockFile/", views.unblockFile, name="unblockFile"),
     path("showMyFiles/", views.showMyFiles, name="showMyFiles"),
-
-     path("", views.index, name="index"),
-     path("contact/", views.contact, name="contact"),
-
+    path("", views.index, name="index"),
+    path("contact/", views.contact, name="contact"),
     #path("testTransaction/", views.testTransaction, name="testTransaction"),
     path("<id>/deleteGroup", views.deleteGroup, name="deleteGroup"),
     path("reports/", views.reports, name="reports"),

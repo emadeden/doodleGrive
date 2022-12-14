@@ -7,9 +7,6 @@
   <div class="container-fluid">
     <form action = "" method = "POST">
       {% csrf_token %}
-
-
-
       <div class="form-group">
         <label for="sel1">Select files to block :</label>
         <select class="form-control" multiple id="sel1" name="files">          
@@ -18,13 +15,15 @@
               <option >{{file}}</option>
             {% endif %}
           {% endfor %}
-
-
         </select>
       </div> 
-
-
       <input type="submit" value="Block" class="btn btn-primary">
     </form>
   </div>
+{% endblock %}
+
+{% block ajax %}
+<script>
+    
+</script>
 {% endblock %}

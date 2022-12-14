@@ -9,7 +9,6 @@ from .models import *
 from itertools import chain
 from django.db import transaction
 import json
-# Create your views here.
 import os 
 import datetime
 from django.db.models import Q
@@ -80,18 +79,6 @@ def upload(request):
         groups = user.g_set.all()
         return render(request, 'uploadFile.html' , {'form': form , 'user': user, 'groups': groups})
 
-# def update(request , id):
-#     context ={}
-#     obj = get_object_or_404(File, id = id)
-#     form = FileForm(request.POST or None, instance = obj)
-#     if form.is_valid():
-#         form.save()
-#         #log action
-#         log_record = {'user': request.user.username  , 'method' : 'update' , 'file_name' : obj.name , 'time_stamp': str(datetime.datetime.now())}
-#         log(log_record, 'files-log.json', 1)
-#         return HttpResponseRedirect("/")
-#     context["form"] = form
-#     return render(request, "upload.html", context)
 
 def update(request , id):
     context ={}
@@ -130,20 +117,6 @@ def delete(request , id ):
     log(log_record, 'files-log.json', 1)
     return JsonResponse({"status":"success","message":"file deleted successfully!"})
 
-# def getFileDetail(request, id ):
-#     user = request.user
-#     obj = get_object_or_404(File, id = id)
-#     groups = obj.groups.all()
-#     userGroups = user.g_set.all()
-#     level = 0 
-#     for group in groups:
-#         if userGroups.filter(id = group.id ).exists(): #l.g_set.all().filter(id = f.id).exists()
-#             level = 1
-#             break
-#     #log action
-#     log_record = {'user': request.user.username  , 'method' : 'getFileDetails' , 'file_name' : obj.name , 'time_stamp': str(datetime.datetime.now())}
-#     log(log_record, 'files-log.json', 4)
-#     return render(request , 'getFileDetail.html' , {'file': obj , 'user':user  , 'level':level})
 
 def getFileDetail(request, id ):
     user = request.user
@@ -169,17 +142,6 @@ def getGroupDetail(request, id ):
     log(log_record, 'groups-log.json', 4)
     return render(request , 'getGroupDetail.html' , {'group': obj , 'users':users  , 'files': files  })
 
-# def home(request):
-#     if 'file_name' in request.GET and request.GET['file_name']:
-#         Files = File.objects.all().filter(name__icontains = request.GET['file_name'])
-#     else:
-#         Files = []
-#         user = request.user
-#         for file in File.objects.all():
-#             if len(list(set( file.groups.all()) & set(user.g_set.all()) )) >=1:
-#                 Files.append(file)
-#         #allFile = File.objects.all()
-#     return render(request , 'home.html' , {'files' : Files})
 
 def home(request):
     # user authenticated
@@ -263,68 +225,6 @@ def createGroup(request):
         users = CustomUser.objects.all().exclude(pk  = user.pk)
         return render(request , 'CreateGroup.html'  , {'users': users})
 
-# def editGroup(request , id):
-#     user = request.user 
-#     if request.method == "POST" : 
-#         g = G.objects.get(pk = id )
-#         g.name = request.POST['name']
-#         try:
-#             g.save()
-#         except:
-#             return JsonResponse({'status':'fail','message':'error'},status = 500)
-#         g.users.remove(*g.users.all())
-#         users = request.POST.getlist('users')
-#         users = CustomUser.objects.filter(username__in = users )
-#         g.users.add(*users , user )
-#         #log action
-#         log_record = {'user': request.user.username  , 'method' : 'editGroup' , 'group_name' : g.name , 'time_stamp': str(datetime.datetime.now())}
-#         log(log_record, 'groups-log.json', 2)
-#         return redirect('/'+str(id)+'/editGroup')
-#     else:
-#         g = G.objects.get(pk = id )
-#         name = g.name
-#         users = g.users.all()
-#         restUSers = CustomUser.objects.all().exclude(pk__in = users)
-#         # here is my edits 
-#         blockedFilesInGroup = g.file_set.filter(~Q(block =  None))
-#         result = []
-#         for file in blockedFilesInGroup:
-#             result.append(file.block)
-#         users = users.filter(~Q(username = result))
-#         return render(request ,  'editGroup.html' , {'name': name , 'users': result , 'restUSers': restUSers})
-def editGroup(request , id):
-    user = request.user 
-    if request.method == "POST" : 
-        g = G.objects.get(pk = id )
-        g.name = request.POST['name']
-        try:
-            g.save()
-        except:
-            return JsonResponse({'status':'fail','message':'error'},status = 500)
-        blockedFiles = g.file_set.all().filter(~Q(block = None))
-        g.users.remove(*g.users.all())
-        users = request.POST.getlist('users')
-        users = CustomUser.objects.filter(username__in = users )
-        g.users.add(*users , user )
-        #log action
-        log_record = {'user': request.user.username  , 'method' : 'editGroup' , 'group_name' : g.name , 'time_stamp': str(datetime.datetime.now())}
-        log(log_record, 'groups-log.json', 2)
-        return redirect('/'+str(id)+'/editGroup')
-    else:
-        g = G.objects.get(pk = id )
-        name = g.name
-        blockedFiles = g.file_set.all().filter(~Q(block = None))
-        allUsersInGroup = g.users.all()
-        restUSers = CustomUser.objects.all().exclude(pk__in = allUsersInGroup)
-        allUsersInGroup = allUsersInGroup.exclude(pk = user.pk)
-        usersCouldRemove = [] 
-        for user in allUsersInGroup:
-            if blockedFiles.filter(block = user).count() == 0 :
-                usersCouldRemove.append(user)
-        return render(request ,  'editGroup.html' , {'name': name , 'users': usersCouldRemove , 'restUSers': restUSers})
-
-
-
 # dont forget to auth onwer of group only can do this 
 def editGroupRemoveMember(request,  id ):
     user = request.user 
@@ -359,8 +259,7 @@ def editGroupAddMember(request, id ):
         g = G.objects.get(pk = id )
         usersCouldAdd = CustomUser.objects.all().exclude(pk__in = g.users.all()).distinct()
         return render (request , 'editGroupRemoveMember.html' , {'users':usersCouldAdd} )
-
-    
+  
 def blockFile(request):
     user = request.user 
     if request.method == 'POST':
@@ -403,15 +302,6 @@ def unblockFile(request):
     files = File.objects.all().filter(block = user )
     return render( request, 'unblockFile.html' , {'files': files})
 
-
-
-
-
-
-
-
-
-
 def testTransaction(request):
     emad = CustomUser.objects.all()[0]
     try:
@@ -424,10 +314,6 @@ def testTransaction(request):
     
     return HttpResponse(emad.username)
         
-
-
-
-
 def deleteGroup(request , id ):
     try:
         deletedGroup = G.objects.all().get(id = id )
@@ -441,10 +327,6 @@ def deleteGroup(request , id ):
     except Exception as e:
         return JsonResponse({'status':'fail','message':e})
         
-
-
-
-
 def reports(request):
     user = request.user 
     json_file = open(SITE_ROOT+'/media/files-log.json'  , "r")
