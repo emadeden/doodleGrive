@@ -5,11 +5,11 @@
 
 {% block content %}
   <div class="container-fluid">
-    <form action = "" method = "POST">
+    <form action = "" method = "POST" id="post-form">
       {% csrf_token %}
       <div class="form-group">
-        <label for="sel1">Select files to block :</label>
-        <select class="form-control" multiple id="sel1" name="files">          
+        <label for="files">Select files to block :</label>
+        <select class="form-control" multiple id="files" name="files">          
           {% for file in files %}
             {% if file.block is None%}
               <option >{{file}}</option>
@@ -20,10 +20,74 @@
       <input type="submit" value="Block" class="btn btn-primary">
     </form>
   </div>
+
+
+
+
+
+
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-title"></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body" id="modal-body">
+          
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+
+
+
 {% endblock %}
 
 {% block ajax %}
 <script>
-    
+$(document).on('submit', '#post-form',function(e){
+  e.preventDefault();
+    $.ajax({
+        type:'POST',
+        url:'{% url "blockFile" %}',
+        data:{
+            files:$('#files').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success:function(json){
+          files =json['files']
+          var $el = $("#files");
+          if (json['status'] == 'success'){
+            $el.empty();
+            $.each(files, function(key,file) {
+            $el.append($("<option></option>").text(file));
+              });
+          }
+
+          $("#modal-title").text(json['status']);
+          $('#modal-body').text(json['message']);
+          $("#myModal").modal();         
+        },
+        error : function(xhr,errmsg,err) {
+          $("#modal-title").text(json['status']);
+          $('#modal-body').text(json['message']);
+          $("#myModal").modal();
+    }
+    });
+});
+
 </script>
 {% endblock %}

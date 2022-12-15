@@ -263,11 +263,12 @@ def editGroupAddMember(request, id ):
 def blockFile(request):
     user = request.user 
     if request.method == 'POST':
-        files = File.objects.all().filter(name__in = request.POST.getlist('files'))
+        files = File.objects.all().filter(name__in = request.POST.getlist('files[]'))
+        user_blockable_files= user.g_set.all().filter(file__block = None )
         try:
             with transaction.atomic():
                 for file in files:
-                    if file.block is None:
+                    if file.block is None and file in user_blockable_files:
                         file.block = user
                         file.save()
                         #log action
@@ -275,18 +276,17 @@ def blockFile(request):
                         log(log_record, 'files-log.json', 2)
                     else:
                         1/0
+        
+        
         except:
             return JsonResponse({'status':'fail','message':'operation failed'})     
-        return JsonResponse({'status':'success','message':'files blocked successfully'})
+        files  = user.g_set.all().filter(file__block  = None ).values_list('file__name' , flat  = True).distinct()
+        files = list(files)
+        print(files)
+        return JsonResponse({'status':'success','message':'files blocked successfully' , 'files':files })
     
-    mygroups = user.g_set.all()
-    i = 0
-    result = G.objects.none()
-    while i< len(mygroups):
-        result = list(chain(mygroups[i].file_set.all() , result))
-        i = i+1 
-    result = set(result)
-    return render( request, 'blockFile.html' , {'files': result})
+    files  = user.g_set.all().filter(file__block  = None ).values_list('file__name' , flat  = True).distinct()
+    return render( request, 'blockFile.html' , {'files': files})
 
 def unblockFile(request):
     user = request.user

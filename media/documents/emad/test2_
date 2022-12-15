@@ -1,0 +1,75 @@
+Docker Commands:
+# this will be comment 
+
+1- docker --version
+2- service docker start
+3- service docker restart
+4- service docker stop
+5- docker images 
+# show all running containers 
+6- docker ps  
+# list running and stoped container (history) 
+7- docker ps -a 
+# This will start image container and map TCP port 80 in the container to port 8080 on the Docker host
+8- docker container run -dt -p 8080:80 image_name
+9- docker container run -dt -p 8080:80 --name container_name image_name 
+10- docker container run -dt -p 8080:80 --name container_name --net network_name image_name 
+# here we specific static ip for this container  
+11- docker container run -dt -p 8080:80 --name container_name --net network_name --ip ip_address image_name 
+# pull image from docker hub 
+12- docker pull image_name 
+13- docker stop container_id or container_name
+# restart stoped container 
+14- docker start container_id or container_name
+15- docker logs container_id or container_name 
+# get the terminal of the runing container 
+16- docker exec -it container_name or container_id /bin/bash 
+# this command will create new image from container where test01 is stoped container and test02 is the name of the image i want to create from the container 
+17- docker commit test01 test02 
+
+# this container already runing but will configure it to allways restart unless it stopped
+18- docker update --restart unless-stopped container_name or container_id
+
+# this will start this container and configure it to allways restart unless it stopped
+19- docker run -d --restart unless-stopped image_name or image_id 
+
+20- docker network ls 
+
+# create network with subnet=192.168.20.3/24
+21- docker network create --subnet=192.168.20.3/24 network_name
+
+22- docker inspect container_name or container_id
+23- docker network inspect network_name or network_id 
+24- docker rm container_name or container_id
+25- docker network rm network_name or network_id 
+
+
+
+
+
+
+
+
+
+
+
+
+
+notic: 
+to download image to desktop:
+docker save -o /home/emad/Desktop/image_copy.tar hello-world  (hello-world is the image name and image_copy.tar is the directoy )
+
+and to load this image to docker images do this:
+docker load -i image_copy.tar
+and then test docker images 
+
+
+
+
+
+
+
+remember python container id: 2b041d3544bd ( in this container i installed django and termcolor )
+
+
+
