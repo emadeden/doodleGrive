@@ -89,6 +89,7 @@ def update(request , id):
         try:
             with transaction.atomic():
                 g = G.objects.filter(id__in  = request.POST.getlist('groups'))
+                print(g)
                 #print(request.POST.getlist('groups'))
                 for group in g :
                     group_members = group.users.all()
@@ -179,7 +180,7 @@ def editContent(request , id ):
     
     elif obj.block != user :
         #return HttpResponse('You Cant Edit Because the file is bocked by '+ str(obj.block))
-        return JsonResponse({"status":"fail","message":"file blocked"},403)
+        return JsonResponse({"status":"fail","message":"file blocked"},status =403)
     form = editForm(request.POST or None, instance = obj)
     if form.is_valid():
         file = SITE_ROOT+"/media/" + str(obj.file) 
@@ -264,11 +265,13 @@ def blockFile(request):
     user = request.user 
     if request.method == 'POST':
         files = File.objects.all().filter(name__in = request.POST.getlist('files[]'))
-        user_blockable_files= user.g_set.all().filter(file__block = None )
+        user_blockable_files= user.g_set.all().filter(file__block = None ).values_list('file__name' , flat  = True).distinct()
+        print( files)
         try:
             with transaction.atomic():
                 for file in files:
-                    if file.block is None and file in user_blockable_files:
+                    print(file)
+                    if file.block is None  and file.name in user_blockable_files:
                         file.block = user
                         file.save()
                         #log action
@@ -282,7 +285,6 @@ def blockFile(request):
             return JsonResponse({'status':'fail','message':'operation failed'})     
         files  = user.g_set.all().filter(file__block  = None ).values_list('file__name' , flat  = True).distinct()
         files = list(files)
-        print(files)
         return JsonResponse({'status':'success','message':'files blocked successfully' , 'files':files })
     
     files  = user.g_set.all().filter(file__block  = None ).values_list('file__name' , flat  = True).distinct()
