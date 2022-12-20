@@ -89,13 +89,15 @@ def update(request , id):
         try:
             with transaction.atomic():
                 g = G.objects.filter(id__in  = request.POST.getlist('groups'))
-                print(g)
+                print(request.POST.getlist('groups'))
                 #print(request.POST.getlist('groups'))
                 for group in g :
                     group_members = group.users.all()
                     if user in group_members:
+                        print(group_members)
                         obj.groups.add(group)
                     else:
+                        print('asdasdasd emad aldne ')
                         1/0
                 form.save()
                 #log action
@@ -247,7 +249,7 @@ def editGroupRemoveMember(request,  id ):
         usersCouldRemove  = g.users.all().exclude(pk__in  = usersCouldNotRemove).exclude(pk = request.user.pk) 
         return render (request , 'editGroupRemoveMember.html' , {'users':usersCouldRemove} )
 
-# dont forget to auth onwer of group only can do this 
+# dont forget to auth onwer of group only can do this  
 def editGroupAddMember(request, id ):
     user = request.user 
     if request.method =='POST':
@@ -293,7 +295,9 @@ def blockFile(request):
 def unblockFile(request):
     user = request.user
     if request.method == 'POST':
-        files = File.objects.all().filter(name__in = request.POST.getlist('files'))
+        files = File.objects.all().filter(name__in = request.POST.getlist('files')).filter(block = user )
+        if (files.count() != len(request.POST.getlist('files'))):
+            return JsonResponse({'status':'failed','message':'files unBlocked Failed'})
         for file in files:
             file.block = None
             file.save()
@@ -342,4 +346,7 @@ def reports(request):
 
 
 
+
+# new edit unblockFiles function 
+# i am here 
 
